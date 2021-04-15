@@ -1,0 +1,26 @@
+[http.middlewares.simpleAuth.basicAuth]
+  users = [
+    "PLEASEREPLACEME"
+  ]
+
+[http.middlewares.middlewares-secure-headers]
+  [http.middlewares.middlewares-secure-headers.headers]
+    accessControlAllowMethods= ["GET", "OPTIONS", "PUT"]
+    accessControlMaxAge = 100
+    hostsProxyHeaders = ["X-Forwarded-Host"]
+    sslRedirect = true
+    stsSeconds = 63072000
+    stsIncludeSubdomains = true
+    stsPreload = true
+    forceSTSHeader = true
+    contentTypeNosniff = true 
+    browserXssFilter = true 
+    referrerPolicy = "same-origin" 
+
+[http.routers.api]
+  rule = "Host(`YOURDOMAIN`)"
+  entrypoints = ["websecure"]
+  middlewares = ["simpleAuth"]
+  service = "api@internal"
+  [http.routers.api.tls]
+    certResolver = "lets-encrypt"
